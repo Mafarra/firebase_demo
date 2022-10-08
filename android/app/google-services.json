@@ -1,0 +1,54 @@
+{
+  "project_info": {
+    "project_number": "481021346730",
+    "project_id": "mamdouh-learn-app",
+    "storage_bucket": "mamdouh-learn-app.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:481021346730:android:d9260d8dc9791d9ebf61d3",
+        "android_client_info": {
+          "package_name": ""com.example.firebase_course""
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "481021346730-5htdk8iig9oil9ivjjefidr5jo3hmu27.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": ""com.example.firebase_course"",
+            "certificate_hash": "a606c1ca1a54a6a691b7b66455084f1efc6edbf6"
+          }
+        },
+        {
+          "client_id": "481021346730-o10r2g8c4t8v6eqikj6s8ac96ts7uh04.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCyFaviooMpj_HipW6qdS_c_w4eEtuErBQ"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "481021346730-o10r2g8c4t8v6eqikj6s8ac96ts7uh04.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "481021346730-reglhamirlhg4ilkgpi3gu0n5r83659l.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.example.firebase-demo"
+              }
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
