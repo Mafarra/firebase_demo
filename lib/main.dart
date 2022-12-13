@@ -1,6 +1,10 @@
+// ignore_for_file: avoid_print
+
 import 'package:flutter/material.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+
+import 'firebase_Service/firebase_auth.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -10,7 +14,6 @@ void main() async {
 
 class MyApp extends StatelessWidget {
   const MyApp({Key? key}) : super(key: key);
-
   // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
@@ -33,56 +36,16 @@ class MyHomePage extends StatefulWidget {
   State<MyHomePage> createState() => _MyHomePageState();
 }
 
-anonymouseSignIn(UserCredential? userCredential) async {
-  try {
-    userCredential = await FirebaseAuth.instance.signInAnonymously();
-    print("$userCredential \n Signed in with temporary account.");
-    print("\n user ID : ${userCredential.user!.uid.toString()}");
-  } on FirebaseAuthException catch (e) {
-    switch (e.code) {
-      case "operation-not-allowed":
-        print("Anonymous auth hasn't been enabled for this project.");
-        break;
-      default:
-        print("Unknown error.");
-    }
-  }
-}
-
-creatUserWithEmailAndPassword(UserCredential? userCredential) async {
-  try {
-    userCredential = await FirebaseAuth.instance.createUserWithEmailAndPassword(
-        email: "mam.farra2030@gmail.com", password: "123456789");
-    print("$userCredential \n createUserWithEmailAndPassword.");
-    print(
-        "user email: \n ${userCredential.user?.email.toString() ?? "email is null"} ");
-  } on FirebaseAuthException catch (e) {
-    if (e.code == 'weak-password') {
-      print('The password provided is too weak.');
-    } else if (e.code == 'email-already-in-use') {
-      print('The account already exists for that email.');
-    }
-  } catch (e) {
-    print(e);
-  }
-}
-
-signInWithEmailAndPassword(UserCredential? userCredential) async {
-  try {
-    userCredential = await FirebaseAuth.instance.signInWithEmailAndPassword(
-        email: "mam.farra2030@gmail.com", password: "123456789");
-         print('user is signed in');
-  } on FirebaseAuthException catch (e) {
-    if (e.code == 'user-not-found') {
-      print('No user found for that email.');
-    } else if (e.code == 'wrong-password') {
-      print('Wrong password provided for that user.');
-    }
-  }
-}
-
 class _MyHomePageState extends State<MyHomePage> {
   UserCredential? userCredential;
+  FireBaseAuth fireBaseAuth = FireBaseAuth();
+  // Google Sign-in
+  final credential =
+      GoogleAuthProvider.credential(idToken: 'WIeN8kTCD1hIjwhrNo57VwQBYCg2)');
+  // Email and password sign-in
+  final emailPassCredential = EmailAuthProvider.credential(
+      email: "mam.farra2030@gmail.com", password: "123456789");
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -98,16 +61,27 @@ class _MyHomePageState extends State<MyHomePage> {
               ),
               // this Button for anonymous sign in
               ElevatedButton(
-                  onPressed: () => anonymouseSignIn(userCredential),
+                  onPressed: () =>
+                      fireBaseAuth.anonymouseSignIn(userCredential),
                   child: const Text("»anonymouse Sign In")),
 
               ElevatedButton(
-                onPressed: () => creatUserWithEmailAndPassword(userCredential),
+                onPressed: () =>
+                    fireBaseAuth.creatUserWithEmailAndPassword(userCredential),
                 child: const Text("»creatUserWithEmailAndPassword"),
               ),
               ElevatedButton(
-                onPressed: () => signInWithEmailAndPassword(userCredential),
+                onPressed: () =>
+                    fireBaseAuth.signInWithEmailAndPassword(userCredential),
                 child: const Text("»sign In WithEmailAndPassword"),
+              ),
+              ElevatedButton(
+                onPressed: () => fireBaseAuth.signOut(),
+                child: const Text("»sign Out"),
+              ),
+              ElevatedButton(
+                onPressed: () => fireBaseAuth.linkWithCredential(credential,userCredential),
+                child: const Text("»linkWithCredential"),
               ),
             ]),
       ),
