@@ -80,8 +80,11 @@ class _MyHomePageState extends State<MyHomePage> {
                 child: const Text("»sign Out"),
               ),
               ElevatedButton(
-                onPressed: () => fireBaseAuth.linkWithCredential(credential,userCredential),
-                child: const Text("»linkWithCredential"),
+                onPressed: () async {
+                  UserCredential cred = await fireBaseAuth.signInWithGoogle();
+                  print(cred);
+                },
+                child: const Text("signInWithGoogle"),
               ),
             ]),
       ),
