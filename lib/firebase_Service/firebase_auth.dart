@@ -1,6 +1,10 @@
 // ignore_for_file: avoid_print
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 import 'package:google_sign_in/google_sign_in.dart';
+
+import '../Utils/most_usage_functions.dart';
 
 class FireBaseAuth {
   anonymouseSignIn(UserCredential? userCredential) async {
@@ -19,36 +23,52 @@ class FireBaseAuth {
     }
   }
 
-  creatUserWithEmailAndPassword(UserCredential? userCredential) async {
+  creatUserWithEmailAndPassword({String? email, String? password}) async {
     try {
-      userCredential = await FirebaseAuth.instance
+      UserCredential userCredential = await FirebaseAuth.instance
           .createUserWithEmailAndPassword(
-              email: "mam.farra2030@gmail.com", password: "123456789");
-      print("$userCredential \n createUserWithEmailAndPassword.");
-      print(
-          "user email: \n ${userCredential.user?.email.toString() ?? "email is null"} ");
+              email: email ?? "", password: password ?? "");
+      await snackSuccess('Success', "Done!");
+      print("${userCredential.user}");
     } on FirebaseAuthException catch (e) {
       if (e.code == 'weak-password') {
-        print('The password provided is too weak.');
+        awesomeDialog(
+          Get.context!,
+          title: 'Error',
+          description: 'the password provided is too weak',
+        );
       } else if (e.code == 'email-already-in-use') {
-        print('The account already exists for that email.');
+        awesomeDialog(
+          Get.context!,
+          title: 'Error',
+          description: 'The account already exists for that email.',
+        );
       }
     } catch (e) {
       print(e);
     }
   }
 
-  signInWithEmailAndPassword(UserCredential? userCredential) async {
+  signInWithEmailAndPassword({String? email, String? password}) async {
     try {
-      userCredential = await FirebaseAuth.instance.signInWithEmailAndPassword(
-          email: "mam.farra2030@gmail.com", password: "123456789");
-      print("is emailVerified ? ${userCredential.user!.emailVerified}");
-      print('user is signed in');
+      UserCredential userCredential = await FirebaseAuth.instance
+          .signInWithEmailAndPassword(
+              email: email ?? "", password: password ?? "");
+     await snackSuccess("login Success", "done!");
     } on FirebaseAuthException catch (e) {
       if (e.code == 'user-not-found') {
-        print('No user found for that email.');
+        awesomeDialog(
+          Get.context!,
+          title: 'Error',
+          description: 'No user found for that email.',
+        );
       } else if (e.code == 'wrong-password') {
         print('Wrong password provided for that user.');
+        awesomeDialog(
+          Get.context!,
+          title: 'Error',
+          description: 'Wrong password provided for that user.',
+        );
       }
     }
     User user = FirebaseAuth.instance.currentUser!;

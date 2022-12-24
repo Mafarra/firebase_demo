@@ -1,9 +1,9 @@
 #!/bin/sh
 # This is a generated file; do not edit or check into version control.
 export "FLUTTER_ROOT=/Users/mamdouhalfarra/Developer/flutter"
-export "FLUTTER_APPLICATION_PATH=/Users/mamdouhalfarra/firebase_demo"
+export "FLUTTER_APPLICATION_PATH=/Users/mamdouhalfarra/Applications/firebase_demo"
 export "COCOAPODS_PARALLEL_CODE_SIGN=true"
-export "FLUTTER_TARGET=/Users/mamdouhalfarra/firebase_demo/lib/main.dart"
+export "FLUTTER_TARGET=/Users/mamdouhalfarra/Applications/firebase_demo/lib/main.dart"
 export "FLUTTER_BUILD_DIR=build"
 export "FLUTTER_BUILD_NAME=1.0.0"
 export "FLUTTER_BUILD_NUMBER=1"
@@ -12,4 +12,4 @@ export "DART_OBFUSCATION=false"
 export "EXTRA_FRONT_END_OPTIONS=--no-sound-null-safety"
 export "TRACK_WIDGET_CREATION=true"
 export "TREE_SHAKE_ICONS=false"
-export "PACKAGE_CONFIG=/Users/mamdouhalfarra/firebase_demo/.dart_tool/package_config.json"
+export "PACKAGE_CONFIG=/Users/mamdouhalfarra/Applications/firebase_demo/.dart_tool/package_config.json"

@@ -1,10 +1,9 @@
 // ignore_for_file: avoid_print
 
+import 'package:firebase_demo/presentation/auth/regestration_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_core/firebase_core.dart';
-import 'package:firebase_auth/firebase_auth.dart';
-
-import 'firebase_Service/firebase_auth.dart';
+import 'package:get/get.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -17,12 +16,12 @@ class MyApp extends StatelessWidget {
   // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
+    return GetMaterialApp(
       title: 'Flutter Demo',
       theme: ThemeData(
         primarySwatch: Colors.blue,
       ),
-      home: const MyHomePage(title: 'Flutter Demo Home Page'),
+      home: const RegistrationScreen(),//MyHomePage(title: 'Flutter Demo Home Page'),
     );
   }
 }
@@ -37,56 +36,15 @@ class MyHomePage extends StatefulWidget {
 }
 
 class _MyHomePageState extends State<MyHomePage> {
-  UserCredential? userCredential;
-  FireBaseAuth fireBaseAuth = FireBaseAuth();
-  // Google Sign-in
-  final credential =
-      GoogleAuthProvider.credential(idToken: 'WIeN8kTCD1hIjwhrNo57VwQBYCg2)');
-  // Email and password sign-in
-  final emailPassCredential = EmailAuthProvider.credential(
-      email: "mam.farra2030@gmail.com", password: "123456789");
-
+ 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
         title: Text(widget.title),
       ),
-      body: Center(
-        child: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: <Widget>[
-              const Text(
-                'Testing firebase Auth:',
-              ),
-              // this Button for anonymous sign in
-              ElevatedButton(
-                  onPressed: () =>
-                      fireBaseAuth.anonymouseSignIn(userCredential),
-                  child: const Text("»anonymouse Sign In")),
-
-              ElevatedButton(
-                onPressed: () =>
-                    fireBaseAuth.creatUserWithEmailAndPassword(userCredential),
-                child: const Text("»creatUserWithEmailAndPassword"),
-              ),
-              ElevatedButton(
-                onPressed: () =>
-                    fireBaseAuth.signInWithEmailAndPassword(userCredential),
-                child: const Text("»sign In WithEmailAndPassword"),
-              ),
-              ElevatedButton(
-                onPressed: () => fireBaseAuth.signOut(),
-                child: const Text("»sign Out"),
-              ),
-              ElevatedButton(
-                onPressed: () async {
-                  UserCredential cred = await fireBaseAuth.signInWithGoogle();
-                  print(cred);
-                },
-                child: const Text("signInWithGoogle"),
-              ),
-            ]),
+      body: const Center(
+        child:  Text('Mamdouh Alfarra practice'),
       ),
     );
   }
