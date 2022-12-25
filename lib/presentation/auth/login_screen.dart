@@ -52,7 +52,7 @@ class _LoginScreenState extends State<LoginScreen> {
                 _email = value;
               },
             ),
-            SizedBox(
+            const SizedBox(
               height: 20,
             ),
             CustomTextFormField(
@@ -84,14 +84,23 @@ class _LoginScreenState extends State<LoginScreen> {
               },
               onSaved: (value) => _password = value,
             ),
-            SizedBox(
+            const SizedBox(
               height: 20,
             ),
             ElevatedButton(
               onPressed: () {
                 login();
               },
-              child: Text('Log In'),
+              child: const Text('sign in'),
+            ),
+            const SizedBox(
+              height: 20,
+            ),
+            ElevatedButton(
+              onPressed: () {
+                fireBaseAuth.signOut();
+              },
+              child: const Text('sign Out'),
             ),
           ],
         ),

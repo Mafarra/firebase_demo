@@ -1,8 +1,11 @@
 // ignore_for_file: avoid_print
+import 'package:awesome_dialog/awesome_dialog.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:firebase_demo/Utils/sh_util.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:google_sign_in/google_sign_in.dart';
+import 'package:logger/logger.dart';
 
 import '../Utils/most_usage_functions.dart';
 
@@ -51,10 +54,21 @@ class FireBaseAuth {
 
   signInWithEmailAndPassword({String? email, String? password}) async {
     try {
-      UserCredential userCredential = await FirebaseAuth.instance
-          .signInWithEmailAndPassword(
-              email: email ?? "", password: password ?? "");
-     await snackSuccess("login Success", "done!");
+      if (!SharedPref.instance.getISUserLoggedIn()) {
+        Logger().e(
+            "getISUserLoggedIn : ${SharedPref.instance.getISUserLoggedIn()}");
+
+        UserCredential userCredential = await FirebaseAuth.instance
+            .signInWithEmailAndPassword(
+                email: email ?? "", password: password ?? "");
+        await snackSuccess("login Success", "user is signed in");
+        SharedPref.instance.setIsUserLoggedIn(true);
+      } else {
+        awesomeDialog(Get.context!,
+            title: "Sorry",
+            description: "user is already signed in",
+            dialogType: DialogType.warning);
+      }
     } on FirebaseAuthException catch (e) {
       if (e.code == 'user-not-found') {
         awesomeDialog(
@@ -71,8 +85,9 @@ class FireBaseAuth {
         );
       }
     }
-    User user = FirebaseAuth.instance.currentUser!;
-    checkIfUserVerified(user);
+    //checkIfUserVerified stooped after test worked well
+    // User user = FirebaseAuth.instance.currentUser!;
+    // checkIfUserVerified(user);
   }
 
   checkIfUserVerified(User? user) async {
@@ -94,11 +109,22 @@ class FireBaseAuth {
 
   signOut() async {
     try {
-      await FirebaseAuth.instance.signOut();
-      print('user is signed out');
+      if (SharedPref.instance.getISUserLoggedIn()) {
+        Logger().e(
+            "getISUserLoggedIn : ${SharedPref.instance.getISUserLoggedIn()}");
+        await FirebaseAuth.instance.signOut();
+        await snackSuccess("title", 'user is signed out');
+        SharedPref.instance.setIsUserLoggedIn(false);
+        SharedPref.instance.clear();
+      } else {
+        awesomeDialog(Get.context!,
+            title: "Sorry",
+            description: "user is already signed out",
+            dialogType: DialogType.warning);
+      }
     } on FirebaseAuthException catch (e) {
       if (e.code == 'user-not-found') {
-        print('No user found for that email.');
+        await snackSuccess("title", "user is already signed out");
       }
     }
   }
