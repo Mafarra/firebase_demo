@@ -10,6 +10,7 @@ class CustomTextFormField extends StatelessWidget {
   final FocusNode? focusNode;
   final FocusNode? nextFocusNode;
   final InputDecoration? decoration;
+  final TextEditingController? controller;
 
   const CustomTextFormField({
     Key? key,
@@ -21,12 +22,14 @@ class CustomTextFormField extends StatelessWidget {
     this.textInputAction,
     this.focusNode,
     this.nextFocusNode,
-    this.decoration
+    this.decoration,
+    this.controller,
   }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     return TextFormField(
+      controller: controller,
       decoration: decoration ?? InputDecoration(
         labelText: labelText,
         contentPadding: const EdgeInsets.symmetric(vertical: 10, horizontal: 20),
@@ -44,7 +47,7 @@ class CustomTextFormField extends StatelessWidget {
       ),
       obscureText: obscureText!,
       validator: ((value) => validator!(value)),
-      onSaved: ((value) => onSaved!(value)),
+      // onSaved: ((value) => onSaved!(value)),
       keyboardType: keyboardType,
       textInputAction: textInputAction,
       focusNode: focusNode,

@@ -2,6 +2,8 @@
 import 'package:awesome_dialog/awesome_dialog.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_demo/Utils/sh_util.dart';
+import 'package:firebase_demo/presentation/auth/login_screen.dart';
+import 'package:firebase_demo/presentation/home/home_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:google_sign_in/google_sign_in.dart';
@@ -9,7 +11,7 @@ import 'package:logger/logger.dart';
 
 import '../Utils/most_usage_functions.dart';
 
-class FireBaseAuth {
+class FireBaseAuth extends GetxController {
   anonymouseSignIn(UserCredential? userCredential) async {
     try {
       userCredential = await FirebaseAuth.instance.signInAnonymously();
@@ -52,17 +54,29 @@ class FireBaseAuth {
     }
   }
 
-  signInWithEmailAndPassword({String? email, String? password}) async {
-    try {
-      if (!SharedPref.instance.getISUserLoggedIn()) {
-        Logger().e(
-            "getISUserLoggedIn : ${SharedPref.instance.getISUserLoggedIn()}");
+  void loginValid(
+      {TextEditingController? email, TextEditingController? password}) {
+    String emailText = email!.text;
+    String passwordText = password!.text;
+    if (emailText.isNotEmpty && passwordText.isNotEmpty) {
+      SharedPref.instance.setUserEmail(userEmail: emailText);
+      SharedPref.instance.setUserPassword(userPassword: passwordText);
+      Logger().e("getUserEmail : ${SharedPref.instance.getUserEmail()}");
+      signInWithEmailAndPassword(email: emailText, password: passwordText);
+      update();
+    }
+  }
 
-        UserCredential userCredential = await FirebaseAuth.instance
-            .signInWithEmailAndPassword(
-                email: email ?? "", password: password ?? "");
+  Future<void> signInWithEmailAndPassword(
+      {String? email, String? password}) async {
+    try {
+      if (!SharedPref.instance.getIsUserLoggedIn()) {
+        await FirebaseAuth.instance.signInWithEmailAndPassword(
+            email: email ?? "", password: password ?? "");
         await snackSuccess("login Success", "user is signed in");
-        SharedPref.instance.setIsUserLoggedIn(true);
+        await SharedPref.instance.setIsUserLoggedIn(true);
+        update();
+        await Get.off(const HomePage());
       } else {
         awesomeDialog(Get.context!,
             title: "Sorry",
@@ -109,13 +123,14 @@ class FireBaseAuth {
 
   signOut() async {
     try {
-      if (SharedPref.instance.getISUserLoggedIn()) {
+      if (SharedPref.instance.getIsUserLoggedIn()) {
         Logger().e(
-            "getISUserLoggedIn : ${SharedPref.instance.getISUserLoggedIn()}");
+            "getIsUserLoggedIn : ${SharedPref.instance.getIsUserLoggedIn()}");
         await FirebaseAuth.instance.signOut();
         await snackSuccess("title", 'user is signed out');
-        SharedPref.instance.setIsUserLoggedIn(false);
-        SharedPref.instance.clear();
+        await SharedPref.instance.setIsUserLoggedIn(false);
+        // SharedPref.instance.clear();
+        Get.offAll(const LoginScreen());
       } else {
         awesomeDialog(Get.context!,
             title: "Sorry",

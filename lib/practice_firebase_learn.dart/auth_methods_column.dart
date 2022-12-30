@@ -1,7 +1,7 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 
-import '../firebase_Service/firebase_auth.dart';
+import '../viewModel/firebase_auth.dart';
 
 class AuthMethods extends StatelessWidget {
   const AuthMethods({Key? key}) : super(key: key);

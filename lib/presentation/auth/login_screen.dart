@@ -1,7 +1,9 @@
-import 'package:firebase_demo/presentation/widgets/custom_text_form_field.dart';
+import 'package:firebase_demo/Utils/sh_util.dart';
 import 'package:flutter/material.dart';
-
-import '../../firebase_Service/firebase_auth.dart';
+import '../../Utils/app_color.dart';
+import '../../Utils/app_strings.dart';
+import '../../viewModel/firebase_auth.dart';
+import '../widgets/custom_text_filed.dart';
 
 class LoginScreen extends StatefulWidget {
   const LoginScreen({Key? key}) : super(key: key);
@@ -12,10 +14,25 @@ class LoginScreen extends StatefulWidget {
 
 class _LoginScreenState extends State<LoginScreen> {
   final _formKey = GlobalKey<FormState>();
-  String? _email;
-  String? _password;
-  bool _isObsecure = true;
+  TextEditingController? emailController = TextEditingController();
+  TextEditingController? passwordConroller = TextEditingController();
   FireBaseAuth fireBaseAuth = FireBaseAuth();
+  // String _emailText = "";
+  // String _passwordText = "";
+  @override
+  void initState() {
+    super.initState();
+    emailController!.text = SharedPref.instance.getUserEmail();
+    passwordConroller!.text = SharedPref.instance.getUserPassword();
+  }
+
+  @override
+  void dispose() {
+    emailController!.dispose();
+    passwordConroller!.dispose();
+    super.dispose();
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -35,54 +52,29 @@ class _LoginScreenState extends State<LoginScreen> {
             const SizedBox(
               height: 20,
             ),
-            CustomTextFormField(
-              decoration: const InputDecoration(
-                prefixIcon: Icon(Icons.person),
-                hintText: "email",
-                border: OutlineInputBorder(borderSide: BorderSide(width: 1)),
-                labelText: 'email',
-              ),
-              validator: (value) {
-                if (value!.isEmpty) {
-                  return 'Please enter a username';
-                }
-                return null;
-              },
-              onSaved: (value) {
-                _email = value;
-              },
+            CustomTextFormFiled(
+              label: AppStrings.email,
+              keyboardType: TextInputType.emailAddress,
+              fillColor: AppColor.userPrimaryCompany,
+              cursorColor: AppColor.userPrimaryCompany,
+              textInputAction: TextInputAction.next,
+              isSmallPaddingWidth: true,
+              isBorder: true,
+              controller: emailController,
             ),
             const SizedBox(
               height: 20,
             ),
-            CustomTextFormField(
-              decoration: InputDecoration(
-                labelText: 'Password',
-                prefixIcon: const Icon(Icons.lock),
-                suffixIcon: IconButton(
-                  icon: _isObsecure
-                      ? const Icon(Icons.visibility_off)
-                      : const Icon(
-                          Icons.visibility,
-                        ),
-                  onPressed: () {
-                    setState(() {
-                      _isObsecure = !_isObsecure;
-                    });
-                  },
-                ),
-                hintText: "Password",
-                border:
-                    const OutlineInputBorder(borderSide: BorderSide(width: 1)),
-              ),
-              obscureText: _isObsecure,
-              validator: (value) {
-                if (value!.isEmpty) {
-                  return 'Please enter a password';
-                }
-                return null;
-              },
-              onSaved: (value) => _password = value,
+            CustomTextFormFiled(
+              label: AppStrings.password,
+              keyboardType: TextInputType.visiblePassword,
+              fillColor: AppColor.userPrimaryCompany,
+              cursorColor: AppColor.userPrimaryCompany,
+              textInputAction: TextInputAction.done,
+              isSmallPaddingWidth: true,
+              isBorder: true,
+              controller: passwordConroller,
+              obscureText: true,
             ),
             const SizedBox(
               height: 20,
@@ -96,12 +88,6 @@ class _LoginScreenState extends State<LoginScreen> {
             const SizedBox(
               height: 20,
             ),
-            ElevatedButton(
-              onPressed: () {
-                fireBaseAuth.signOut();
-              },
-              child: const Text('sign Out'),
-            ),
           ],
         ),
       ),
@@ -111,9 +97,8 @@ class _LoginScreenState extends State<LoginScreen> {
   login() async {
     if (_formKey.currentState!.validate()) {
       _formKey.currentState!.save();
-      // Perform login here
-      fireBaseAuth.signInWithEmailAndPassword(
-          email: _email, password: _password);
+      fireBaseAuth.loginValid(
+          email: emailController, password: passwordConroller);
     }
   }
 }

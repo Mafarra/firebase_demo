@@ -1,11 +1,10 @@
 // ignore_for_file: unused_field
-import 'package:firebase_auth/firebase_auth.dart';
-import 'package:firebase_demo/Utils/most_usage_functions.dart';
-import 'package:firebase_demo/firebase_Service/firebase_auth.dart';
+import 'package:firebase_demo/viewModel/firebase_auth.dart';
 import 'package:firebase_demo/presentation/auth/login_screen.dart';
-import 'package:firebase_demo/presentation/widgets/custom_text_form_field.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+
+import '../widgets/simple_custom_text_form.dart';
 
 class RegistrationScreen extends StatefulWidget {
   const RegistrationScreen({Key? key}) : super(key: key);
